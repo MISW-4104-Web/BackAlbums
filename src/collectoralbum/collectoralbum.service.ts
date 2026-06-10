@@ -22,11 +22,11 @@ export class CollectorAlbumService {
     ) { }
 
     async addAlbumToCollector(collectorId: number, albumId: number, collectorAlbumDTO: CollectorAlbumDTO): Promise<CollectorAlbumDTO> {
-        const collector = await this.collectorRepository.findOne(collectorId);
+        const collector = await this.collectorRepository.findOne({ where: { id: collectorId } });
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
-        const album = await this.albumRepository.findOne(albumId);
+        const album = await this.albumRepository.findOne({ where: { id: albumId } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -46,46 +46,49 @@ export class CollectorAlbumService {
 
     async findAlbumsByCollectorId(collectorId: number): Promise<CollectorAlbum[]> {
 
-        const collector = await this.collectorRepository.findOne(collectorId, { relations: ["collectorAlbums"] });
+        const collector = await this.collectorRepository.findOne({ where: { id: collectorId }, relations: { collectorAlbums: true } });
        
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
-        const collectorAlbum = await this.collectorAlbumRepository.find({relations: ["album", "collector"]})
+        const collectorAlbum = await this.collectorAlbumRepository.find({ relations: { album: true, collector: true } })
         
         return collectorAlbum.filter(c => c.collector.id == collectorId );
     }
 
     async findAlbumsByCollectorIdAlbumId(collectorId: number, albumId: number): Promise<CollectorAlbum[]> {
 
-        const collector = await this.collectorRepository.findOne(collectorId);
+        const collector = await this.collectorRepository.findOne({ where: { id: collectorId } });
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
-        const album = await this.albumRepository.findOne(albumId);
+        const album = await this.albumRepository.findOne({ where: { id: albumId } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
-        const collectoralbum = await this.collectorAlbumRepository.find({relations: ["album", "collector"] });
+        const collectoralbum = await this.collectorAlbumRepository.find({ relations: { album: true, collector: true } });
 
         return collectoralbum.filter(c => c.collector.id == collectorId && c.album.id == albumId);
     }
 
     async updateAlbumCollector(collectorId: number, albumId: number, collectorAlbumDTO: CollectorAlbumDTO): Promise<CollectorAlbum> {
-        const collector = await this.collectorRepository.findOne(collectorId, { relations: ["collectorAlbums"] });
+        const collector = await this.collectorRepository.findOne({ where: { id: collectorId }, relations: { collectorAlbums: true } });
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
-        const album = await this.albumRepository.findOne(albumId);
+        const album = await this.albumRepository.findOne({ where: { id: albumId } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
-        const collectoralbum = await this.collectorAlbumRepository.findOne({ where: { collectorId, albumId }, relations: ["album"] }); // { first: "Timber", last: "Saw" } } });
+        const collectoralbum = await this.collectorAlbumRepository.findOne({ where: { collector: { id: collectorId }, album: { id: albumId } }, relations: { album: true } });
         const { error } = validate(this.schema, collectorAlbumDTO);
 
         if(error){
             throw new BusinessLogicException(error.toString(), BusinessError.BAD_REQUEST)  
         } else {
+            if (!collectoralbum)
+                throw new BusinessLogicException("The album is not associated to the collector", BusinessError.NOT_FOUND)
+
             collectoralbum.price = collectorAlbumDTO.price;
             collectoralbum.status = collectorAlbumDTO.status;
 
@@ -94,15 +97,15 @@ export class CollectorAlbumService {
     }
 
     async deleteAlbumCollector(collectorId: number, albumId: number): Promise<CollectorAlbumDTO> {
-        const collector = await this.collectorRepository.findOne(collectorId, { relations: ["collectorAlbums"] });
+        const collector = await this.collectorRepository.findOne({ where: { id: collectorId }, relations: { collectorAlbums: true } });
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
-        const album = await this.albumRepository.findOne(albumId);
+        const album = await this.albumRepository.findOne({ where: { id: albumId } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
-        const collectoralbum = await this.collectorAlbumRepository.findOne({ where: { collectorId, albumId }, relations: ["album"] }); // { first: "Timber", last: "Saw" } } });
+        const collectoralbum = await this.collectorAlbumRepository.findOne({ where: { collector: { id: collectorId }, album: { id: albumId } }, relations: { album: true } });
 
         if (!collectoralbum)
             throw new BusinessLogicException("The album is not associated to the collector", BusinessError.NOT_FOUND)

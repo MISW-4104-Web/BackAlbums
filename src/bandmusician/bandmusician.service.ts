@@ -18,11 +18,11 @@ export class BandMusicianService {
     ) { }
 
     async addMusicianToBand(bandId: number, musicianId: number): Promise<MusicianDTO> {
-        const band = await this.bandRepository.findOne(bandId);
+        const band = await this.bandRepository.findOne({ where: { id: bandId } });
         if (!band)
             throw new BusinessLogicException("The band with the given id was not found", BusinessError.NOT_FOUND)
 
-        const musician = await this.musicianRepository.findOne(musicianId, { relations: ["band"] });
+        const musician = await this.musicianRepository.findOne({ where: { id: musicianId }, relations: { band: true } });
         if (!musician)
             throw new BusinessLogicException("The musician with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -32,11 +32,11 @@ export class BandMusicianService {
     }
 
     async findBandByBandIdMusicianId(bandId: number, musicianId: number): Promise<MusicianDTO> {
-        const band = await this.bandRepository.findOne(bandId);
+        const band = await this.bandRepository.findOne({ where: { id: bandId } });
         if (!band)
             throw new BusinessLogicException("The band with the given id was not found", BusinessError.NOT_FOUND)
 
-        const musician = await this.musicianRepository.findOne(musicianId, { relations: ["band"] });
+        const musician = await this.musicianRepository.findOne({ where: { id: musicianId }, relations: { band: true } });
         if (!musician)
             throw new BusinessLogicException("The musician with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -47,7 +47,7 @@ export class BandMusicianService {
     }
 
     async findMusiciansByBandId(bandId: number): Promise<MusicianDTO[]> {
-        const band = await this.bandRepository.findOne(bandId, { relations: ["musicians"] });
+        const band = await this.bandRepository.findOne({ where: { id: bandId }, relations: { musicians: true } });
         if (!band)
             throw new BusinessLogicException("The band with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -55,11 +55,11 @@ export class BandMusicianService {
     }
 
     async deleteMusicianToBand(bandId: number, musicianId: number): Promise<BandDTO> {
-        const band = await this.bandRepository.findOne(bandId, { relations: ["musicians"] });
+        const band = await this.bandRepository.findOne({ where: { id: bandId }, relations: { musicians: true } });
         if (!band)
             throw new BusinessLogicException("The band with the given id was not found", BusinessError.NOT_FOUND)
 
-        const musician = await this.musicianRepository.findOne(musicianId);
+        const musician = await this.musicianRepository.findOne({ where: { id: musicianId } });
         if (!musician)
             throw new BusinessLogicException("The musician with the given id was not found", BusinessError.NOT_FOUND)
 

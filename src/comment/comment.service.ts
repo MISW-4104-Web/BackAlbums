@@ -22,7 +22,7 @@ export class CommentService {
     ) { }
 
     async findCommentsByAlbumId(albumId: number): Promise<CommentDTO[]> {
-        const album = await this.albumRepository.findOne(albumId, { relations: ["comments"] });
+        const album = await this.albumRepository.findOne({ where: { id: albumId }, relations: { comments: true } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -30,11 +30,11 @@ export class CommentService {
     }
 
     async findCommentsByAlbumIdCommentId(albumId: number, commentId: number): Promise<CommentDTO> {
-        const album = await this.albumRepository.findOne(albumId, { relations: ["comments"] });
+        const album = await this.albumRepository.findOne({ where: { id: albumId }, relations: { comments: true } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
-        const comment = await this.commentRepository.findOne(commentId);
+        const comment = await this.commentRepository.findOne({ where: { id: commentId } });
         if (!comment)
             throw new BusinessLogicException("The comment with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -48,11 +48,11 @@ export class CommentService {
 
     async addCommentAlbum(albumId: number, commentDTO: CommentDTO): Promise<CommentDTO> {
 
-        const album = await this.albumRepository.findOne(albumId);
+        const album = await this.albumRepository.findOne({ where: { id: albumId } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
-        const collector = await this.collectorRepository.findOne(commentDTO.collector.id);
+        const collector = await this.collectorRepository.findOne({ where: { id: commentDTO.collector.id } });
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -72,15 +72,15 @@ export class CommentService {
 
     async updateComment(albumId: number, commentId: number, commentDTO: CommentDTO): Promise<CommentDTO> {
 
-        const album = await this.albumRepository.findOne(albumId, { relations: ["comments"] });
+        const album = await this.albumRepository.findOne({ where: { id: albumId }, relations: { comments: true } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
-        const collector = await this.collectorRepository.findOne(commentDTO.collector.id);
+        const collector = await this.collectorRepository.findOne({ where: { id: commentDTO.collector.id } });
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
-        const comment = await this.commentRepository.findOne(commentId);
+        const comment = await this.commentRepository.findOne({ where: { id: commentId } });
         if (!comment)
             throw new BusinessLogicException("The comment with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -102,11 +102,11 @@ export class CommentService {
 
     async deleteComment(albumId: number, commentId: number) {
 
-        const album = await this.albumRepository.findOne(albumId, { relations: ["comments"] });
+        const album = await this.albumRepository.findOne({ where: { id: albumId }, relations: { comments: true } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
-        const comment = await this.commentRepository.findOne(commentId);
+        const comment = await this.commentRepository.findOne({ where: { id: commentId } });
         if (!comment)
             throw new BusinessLogicException("The comment with the given id was not found", BusinessError.NOT_FOUND)
 

@@ -18,11 +18,11 @@ export class BandService {
     ) { }
 
     async findAll(): Promise<BandDTO[]> {
-        return await this.bandRepository.find({ relations: ["albums", "musicians", "performerPrizes"] });
+        return await this.bandRepository.find({ relations: { albums: true, musicians: true, performerPrizes: true } });
     }
 
     async findOne(id: number): Promise<BandDTO> {
-        const band = await this.bandRepository.findOne(id, { relations: ["albums", "musicians", "performerPrizes"] });
+        const band = await this.bandRepository.findOne({ where: { id }, relations: { albums: true, musicians: true, performerPrizes: true } });
         if (!band)
             throw new BusinessLogicException("The band with the given id was not found", BusinessError.NOT_FOUND)
         return band;
@@ -45,7 +45,7 @@ export class BandService {
 
     async update(id: number, bandDTO: BandDTO): Promise<BandDTO> {
 
-        const band = await this.bandRepository.findOne(id);
+        const band = await this.bandRepository.findOneBy({id: id});;
         if (!band)
             throw new BusinessLogicException("The band with the given id was not found", BusinessError.NOT_FOUND)
         else {
@@ -64,7 +64,7 @@ export class BandService {
     }
 
     async delete(id: number) {
-        const band = await this.bandRepository.findOne(id);
+        const band = await this.bandRepository.findOneBy({id: id});;
         if (!band)
             throw new BusinessLogicException("The band with the given id was not found", BusinessError.NOT_FOUND)
         return await this.bandRepository.remove(band);

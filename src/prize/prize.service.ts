@@ -17,11 +17,11 @@ export class PrizeService {
         private readonly prizeRepository: Repository<Prize>) { }
 
     async findAll(): Promise<PrizeDTO[]> {
-        return await this.prizeRepository.find({ relations: ["performerPrizes"] });
+        return await this.prizeRepository.find({ relations: { performerPrizes: true } });
     }
 
     async findOne(id: number): Promise<PrizeDTO> {
-        const prize = await this.prizeRepository.findOne(id, { relations: ["performerPrizes"] });
+        const prize = await this.prizeRepository.findOne({ where: { id }, relations: { performerPrizes: true } });
         if (!prize)
             throw new BusinessLogicException("The prize with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -43,7 +43,7 @@ export class PrizeService {
     }
 
     async update(id: number, prizeDTO: PrizeDTO): Promise<PrizeDTO> {
-        const prize = await this.prizeRepository.findOne(id);
+        const prize = await this.prizeRepository.findOneBy({id: id});;
         if (!prize)
             throw new BusinessLogicException("The prize with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -60,7 +60,7 @@ export class PrizeService {
     }
 
     async delete(id: number) {
-        const prize = await this.prizeRepository.findOne(id);
+        const prize = await this.prizeRepository.findOneBy({id: id});;
 
         if (!prize)
             throw new BusinessLogicException("The prize with the given id was not found", BusinessError.NOT_FOUND)

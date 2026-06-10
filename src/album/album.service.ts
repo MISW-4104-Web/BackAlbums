@@ -15,11 +15,11 @@ export class AlbumService {
     ) { }
 
     async findAll(): Promise<AlbumDTO[]> {
-        return await this.albumRepository.find({ relations: ["tracks", "performers", "comments"] });
+        return await this.albumRepository.find({ relations: { tracks: true, performers: true, comments: true } });
     }
 
     async findOne(id: number): Promise<AlbumDTO> {
-        const album = await this.albumRepository.findOne(id, { relations: ["tracks", "performers", "comments"] });
+        const album = await this.albumRepository.findOne({ where: { id }, relations: { tracks: true, performers: true, comments: true } });
         if (!album) 
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
         else 
@@ -46,7 +46,7 @@ export class AlbumService {
 
     async update(id: number, albumDTO: AlbumDTO): Promise<AlbumDTO> {
 
-        const album = await this.albumRepository.findOne(id);
+        const album = await this.albumRepository.findOneBy({id: id});;
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
         else {
@@ -68,7 +68,7 @@ export class AlbumService {
     }
 
     async delete(id: number) {
-        const album = await this.albumRepository.findOne(id);
+        const album = await this.albumRepository.findOneBy({id: id});;
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
         else 

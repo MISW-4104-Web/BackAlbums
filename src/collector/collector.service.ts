@@ -15,11 +15,11 @@ export class CollectorService {
     ) { }
 
     async findAll(): Promise<CollectorDTO[]> {
-        return await this.collectorRepository.find({ relations: ["comments", "favoritePerformers", "collectorAlbums"] });
+        return await this.collectorRepository.find({ relations: { comments: true, favoritePerformers: true, collectorAlbums: true } });
     }
 
     async findOne(id: number): Promise<CollectorDTO> {
-        const collector = await this.collectorRepository.findOne(id, { relations: ["comments", "favoritePerformers", "collectorAlbums"] });
+        const collector = await this.collectorRepository.findOne({ where: { id }, relations: { comments: true, favoritePerformers: true, collectorAlbums: true } });
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
         return collector;
@@ -40,7 +40,7 @@ export class CollectorService {
 
     async update(id: number, collectorDTO: CollectorDTO) {
 
-        const collector = await this.collectorRepository.findOne(id);
+        const collector = await this.collectorRepository.findOneBy({id: id});;
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
         else {
@@ -59,7 +59,7 @@ export class CollectorService {
     }
 
     async delete(id: number) {
-        const collector = await this.collectorRepository.findOne(id);
+        const collector = await this.collectorRepository.findOneBy({id: id});;
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
         return await this.collectorRepository.remove(collector);

@@ -22,21 +22,21 @@ export class PerformerPrizeService {
     ) { }
 
     async findPerformerPrize(prizeId: number) {
-        const prize = await this.prizeRepository.findOne(prizeId);
+        const prize = await this.prizeRepository.findOne({ where: { id: prizeId } });
         if (!prize)
             throw new BusinessLogicException("The prize with the given id was not found", BusinessError.NOT_FOUND)
 
-        const performerPrize = await this.performerPrizeRepository.find({ relations: ["performer", "prize"] })
+        const performerPrize = await this.performerPrizeRepository.find({ relations: { performer: true, prize: true } })
         
         return performerPrize.filter(p => p.prize.id == prizeId)
     }
 
     async associatePerformerPrize(prizeId: number, performerId: number, performerPrizeDTO: PerformerPrizeDTO) {
-        const prize = await this.prizeRepository.findOne(prizeId);
+        const prize = await this.prizeRepository.findOne({ where: { id: prizeId } });
         if (!prize)
             throw new BusinessLogicException("The prize with the given id was not found", BusinessError.NOT_FOUND)
 
-        const performer = await this.performerRepository.findOne(performerId);
+        const performer = await this.performerRepository.findOne({ where: { id: performerId } });
         if (!performer)
             throw new BusinessLogicException("The performer with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -55,22 +55,25 @@ export class PerformerPrizeService {
 
     async deletePrizePerformer(prizeId: number, performerId: number) {
 
-        const prize = await this.prizeRepository.findOne(prizeId);
+        const prize = await this.prizeRepository.findOne({ where: { id: prizeId } });
         if (!prize)
             throw new BusinessLogicException("The prize with the given id was not found", BusinessError.NOT_FOUND)
 
-        const performer = await this.performerRepository.findOne(performerId);
+        const performer = await this.performerRepository.findOne({ where: { id: performerId } });
         if (!performer)
             throw new BusinessLogicException("The performer with the given id was not found", BusinessError.NOT_FOUND)
 
-        const performerprize = await this.performerPrizeRepository.findOne({ where: { prizeId, performerId }, relations: ["performer"] });
+        const performerprize = await this.performerPrizeRepository.findOne({ where: { prize: { id: prizeId }, performer: { id: performerId } }, relations: { performer: true } });
+
+        if (!performerprize)
+            throw new BusinessLogicException("The prize is not associated to the performer", BusinessError.NOT_FOUND)
 
         return await this.performerPrizeRepository.remove(performerprize);
 
     }
 
     async findAll(): Promise<PerformerPrizeDTO[]> {
-        return await this.performerPrizeRepository.find({ relations: ["prize"] });
+        return await this.performerPrizeRepository.find({ relations: { prize: true } });
     }
 
     schema = Joi.object({ 

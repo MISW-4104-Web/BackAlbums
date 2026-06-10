@@ -18,11 +18,11 @@ export class AlbumMusicianService {
         private readonly albumRepository: Repository<Album>) { }
 
     async addAlbumMusician(musicianId: number, albumId: number): Promise<AlbumDTO> {
-        const musician = await this.musicianRepository.findOne(musicianId);
+        const musician = await this.musicianRepository.findOne({ where: { id: musicianId } });
         if (!musician)
             throw new BusinessLogicException("The musician with the given id was not found", BusinessError.NOT_FOUND)
 
-        const album = await this.albumRepository.findOne(albumId, { relations: ["performers"] });
+        const album = await this.albumRepository.findOne({ where: { id: albumId }, relations: { performers: true } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -31,11 +31,11 @@ export class AlbumMusicianService {
     }
 
     async findMusiciansByAlbumIdMusicianId(musicianId: number, albumId: number): Promise<PerformerDTO> {
-        const musician = await this.musicianRepository.findOne(musicianId);
+        const musician = await this.musicianRepository.findOne({ where: { id: musicianId } });
         if (!musician)
             throw new BusinessLogicException("The musician with the given id was not found", BusinessError.NOT_FOUND)
 
-        const album = await this.albumRepository.findOne(albumId, { relations: ["performers"] });
+        const album = await this.albumRepository.findOne({ where: { id: albumId }, relations: { performers: true } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -48,7 +48,7 @@ export class AlbumMusicianService {
     }
 
     async associateAlbumMusician(albumId: number, musicianDTO: MusicianDTO[]): Promise<AlbumDTO> {
-        const album = await this.albumRepository.findOne(albumId, { relations: ["performers"] });
+        const album = await this.albumRepository.findOne({ where: { id: albumId }, relations: { performers: true } });
 
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
@@ -56,7 +56,7 @@ export class AlbumMusicianService {
         let musicians: Musician[] = [];
 
         for (let i = 0; i < musicianDTO.length; i++) {
-            const musician = await this.musicianRepository.findOne(musicianDTO[i].id);
+            const musician = await this.musicianRepository.findOne({ where: { id: musicianDTO[i].id } });
             if (!musician)
                 throw new BusinessLogicException("The musician with the given id was not found", BusinessError.NOT_FOUND)
             else
@@ -68,7 +68,7 @@ export class AlbumMusicianService {
     }
 
     async findMusiciansByAlbumId(albumId: number): Promise<PerformerDTO[]> {
-        const album = await this.albumRepository.findOne(albumId, { relations: ["performers"] });
+        const album = await this.albumRepository.findOne({ where: { id: albumId }, relations: { performers: true } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -76,11 +76,11 @@ export class AlbumMusicianService {
     }
 
     async deleteMusicianToAlbum(musicianId: number, albumId: number): Promise<AlbumDTO> {
-        const musician = await this.musicianRepository.findOne(musicianId);
+        const musician = await this.musicianRepository.findOne({ where: { id: musicianId } });
         if (!musician)
             throw new BusinessLogicException("The musician with the given id was not found", BusinessError.NOT_FOUND)
 
-        const album = await this.albumRepository.findOne(albumId, { relations: ["performers"] });
+        const album = await this.albumRepository.findOne({ where: { id: albumId }, relations: { performers: true } });
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 

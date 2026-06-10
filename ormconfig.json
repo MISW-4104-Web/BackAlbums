@@ -1,11 +1,7 @@
 {
-    "type": "postgres",
-    "host": "localhost",
-    "port": 5432,
-    "username": "postgres",
-    "password": "postgres",
-    "database": "vinyls",
-    "synchronize": false,
+    "type": "better-sqlite3",
+    "database": "data/backvynils.sqlite",
+    "synchronize": true,
     "logging": false,
     "entities": [
         "src/**/*entity.ts"

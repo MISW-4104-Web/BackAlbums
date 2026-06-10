@@ -24,14 +24,12 @@ export class Album {
     description: string;
 
     @Column({
-        type: "enum",
-        enum: GENRE
+        type: "text"
     })
     genre: GENRE
 
     @Column({
-        type: "enum",
-        enum: RECORD_LABEL
+        type: "text"
     })
     recordLabel: RECORD_LABEL
 

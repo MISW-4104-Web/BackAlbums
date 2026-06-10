@@ -14,11 +14,11 @@ export class MusicianService {
         private readonly musicianRepository: Repository<Musician>) { }
 
     async findAll(): Promise<MusicianDTO[]> {
-        return await this.musicianRepository.find({ relations: ["albums", "performerPrizes"] });
+        return await this.musicianRepository.find({ relations: { albums: true, performerPrizes: true } });
     }
 
     async findOne(id: number): Promise<MusicianDTO> {
-        const musician = await this.musicianRepository.findOne(id, { relations: ["albums", "performerPrizes"] });
+        const musician = await this.musicianRepository.findOne({ where: { id }, relations: { albums: true, performerPrizes: true } });
         if (!musician)
             throw new BusinessLogicException("The musician with the given id was not found", BusinessError.NOT_FOUND)
         return musician;
@@ -40,7 +40,7 @@ export class MusicianService {
 
     async update(id: number, musicianDTO: MusicianDTO): Promise<MusicianDTO> {
 
-        const musician = await this.musicianRepository.findOne(id);
+        const musician = await this.musicianRepository.findOneBy({id: id});;
         if (!musician)
             throw new BusinessLogicException("The musician with the given id was not found", BusinessError.NOT_FOUND)
         else {
@@ -59,7 +59,7 @@ export class MusicianService {
     }
 
     async delete(id: number) {
-        const musician = await this.musicianRepository.findOne(id);
+        const musician = await this.musicianRepository.findOneBy({id: id});;
         if (!musician)
             throw new BusinessLogicException("The musician with the given id was not found", BusinessError.NOT_FOUND)
         return await this.musicianRepository.remove(musician);

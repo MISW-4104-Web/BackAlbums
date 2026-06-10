@@ -17,11 +17,11 @@ export class CollectorPerformerService {
     ) { }
 
     async associateCollectorPerformer(collectorId: number, performerId: number): Promise<PerformerDTO> {
-        const collector = await this.collectorRepository.findOne(collectorId);
+        const collector = await this.collectorRepository.findOne({ where: { id: collectorId } });
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
-        const performer = await this.performerRepository.findOne(performerId, { relations: ["collectors"] });
+        const performer = await this.performerRepository.findOne({ where: { id: performerId }, relations: { collectors: true } });
         if (!performer)
             throw new BusinessLogicException("The performer with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -32,7 +32,7 @@ export class CollectorPerformerService {
     }
 
     async getPerformersByCollectorId(collectorId: number): Promise<PerformerDTO[]> {
-        const collector = await this.collectorRepository.findOne(collectorId, { relations: ["favoritePerformers"] });
+        const collector = await this.collectorRepository.findOne({ where: { id: collectorId }, relations: { favoritePerformers: true } });
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
@@ -40,11 +40,11 @@ export class CollectorPerformerService {
     }
 
     async deleteCollectorPerformer(collectorId: number, performerId: number): Promise<CollectorDTO> {
-        const collector = await this.collectorRepository.findOne(collectorId, { relations: ["favoritePerformers"] });
+        const collector = await this.collectorRepository.findOne({ where: { id: collectorId }, relations: { favoritePerformers: true } });
         if (!collector)
             throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
-        const performer = await this.performerRepository.findOne(performerId);
+        const performer = await this.performerRepository.findOne({ where: { id: performerId } });
         if (!performer)
             throw new BusinessLogicException("The performer with the given id was not found", BusinessError.NOT_FOUND)
 
