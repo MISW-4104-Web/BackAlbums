@@ -1,4 +1,4 @@
-# BackVynils
+# BackAlbums
 
 ## Project setup
 
@@ -20,10 +20,10 @@ npm run start:prod
 
 Creating the image
 ```zsh
-docker build -t backvynils .
+docker build -t backalbums .
 ```
 
 Running on host machine
 ```zsh
-docker run --rm -p 3000:3000 backvynils
+docker run --rm -p 3000:3000 backalbums
 ```
