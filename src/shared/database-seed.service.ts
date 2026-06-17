@@ -36,7 +36,7 @@ export class DatabaseSeedService implements OnModuleInit {
     private readonly collectorAlbumRepository: Repository<CollectorAlbum>,
     @InjectRepository(PerformerPrize)
     private readonly performerPrizeRepository: Repository<PerformerPrize>,
-  ) {}
+  ) { }
 
   async onModuleInit(): Promise<void> {
     await this.seedIfEmpty();
@@ -119,8 +119,40 @@ export class DatabaseSeedService implements OnModuleInit {
     await this.bandRepository.save(band);
 
     await this.trackRepository.save([
+      // Buscando América
       this.trackRepository.create({ id: 100, name: 'Decisiones', duration: '5:05', album: albums[0] }),
       this.trackRepository.create({ id: 101, name: 'Desapariciones', duration: '6:29', album: albums[0] }),
+      this.trackRepository.create({ id: 102, name: 'GDBD', duration: '4:45', album: albums[0] }),
+      this.trackRepository.create({ id: 103, name: 'Todos Vuelven', duration: '5:15', album: albums[0] }),
+      this.trackRepository.create({ id: 104, name: 'Caminitos Verdes', duration: '5:12', album: albums[0] }),
+      this.trackRepository.create({ id: 105, name: 'El Padre Antonio y el Monaguillo Andrés', duration: '7:08', album: albums[0] }),
+      this.trackRepository.create({ id: 106, name: 'Buscando América', duration: '6:01', album: albums[0] }),
+
+      // A Night at the Opera
+      this.trackRepository.create({ id: 200, name: 'Death on Two Legs', duration: '3:43', album: albums[2] }),
+      this.trackRepository.create({ id: 201, name: 'Lazing on a Sunday Afternoon', duration: '1:08', album: albums[2] }),
+      this.trackRepository.create({ id: 202, name: "I'm in Love with My Car", duration: '3:05', album: albums[2] }),
+      this.trackRepository.create({ id: 203, name: "You're My Best Friend", duration: '2:52', album: albums[2] }),
+      this.trackRepository.create({ id: 204, name: "'39", duration: '3:31', album: albums[2] }),
+      this.trackRepository.create({ id: 205, name: 'Sweet Lady', duration: '4:03', album: albums[2] }),
+      this.trackRepository.create({ id: 206, name: 'Seaside Rendezvous', duration: '2:14', album: albums[2] }),
+      this.trackRepository.create({ id: 207, name: "The Prophet's Song", duration: '8:21', album: albums[2] }),
+      this.trackRepository.create({ id: 208, name: 'Love of My Life', duration: '3:39', album: albums[2] }),
+      this.trackRepository.create({ id: 209, name: 'Good Company', duration: '3:26', album: albums[2] }),
+      this.trackRepository.create({ id: 210, name: 'Bohemian Rhapsody', duration: '5:55', album: albums[2] }),
+      this.trackRepository.create({ id: 211, name: 'God Save the Queen', duration: '1:18', album: albums[2] }),
+
+      // A Day at the Races
+      this.trackRepository.create({ id: 300, name: 'Tie Your Mother Down', duration: '4:48', album: albums[3] }),
+      this.trackRepository.create({ id: 301, name: 'You Take My Breath Away', duration: '5:09', album: albums[3] }),
+      this.trackRepository.create({ id: 302, name: 'Long Away', duration: '3:33', album: albums[3] }),
+      this.trackRepository.create({ id: 303, name: 'The Millionaire Waltz', duration: '4:54', album: albums[3] }),
+      this.trackRepository.create({ id: 304, name: 'You and I', duration: '3:28', album: albums[3] }),
+      this.trackRepository.create({ id: 305, name: 'Somebody to Love', duration: '4:56', album: albums[3] }),
+      this.trackRepository.create({ id: 306, name: 'White Man', duration: '4:59', album: albums[3] }),
+      this.trackRepository.create({ id: 307, name: 'Good Old-Fashioned Lover Boy', duration: '2:54', album: albums[3] }),
+      this.trackRepository.create({ id: 308, name: 'Drowse', duration: '3:45', album: albums[3] }),
+      this.trackRepository.create({ id: 309, name: 'Teo Torriatte (Let Us Cling Together)', duration: '5:50', album: albums[3] }),
     ]);
 
     await this.commentRepository.save([

@@ -123,13 +123,39 @@ INSERT INTO public.performer_prize(
 
 
 --Inserting track
-
-INSERT INTO public.track(
-	id, name, duration, "albumId")
-	VALUES(100, 'Decisiones', '5:05', 100);
-
-INSERT INTO public.track(
-	id, name, duration, "albumId")
-	VALUES(101, 'Desapariciones', '6:29', 100);
 	
 
+INSERT INTO public.track(id,name,duration,"albumId") VALUES
+(100,'Decisiones','5:05',100),
+(101,'Desapariciones','6:29',100),
+(102,'GDBD','4:45',100),
+(103,'Todos Vuelven','5:15',100),
+(104,'Caminitos Verdes','5:12',100),
+(105,'El Padre Antonio y el Monaguillo Andrés','7:08',100),
+(106,'Buscando América','6:01',100);
+
+INSERT INTO public.track(id,name,duration,"albumId") VALUES
+(200,'Death on Two Legs','3:43',102),
+(201,'Lazing on a Sunday Afternoon','1:08',102),
+(202,'I''m in Love with My Car','3:05',102),
+(203,'You''re My Best Friend','2:52',102),
+(204,'''39','3:31',102),
+(205,'Sweet Lady','4:03',102),
+(206,'Seaside Rendezvous','2:14',102),
+(207,'The Prophet''s Song','8:21',102),
+(208,'Love of My Life','3:39',102),
+(209,'Good Company','3:26',102),
+(210,'Bohemian Rhapsody','5:55',102),
+(211,'God Save the Queen','1:18',102);
+
+INSERT INTO public.track(id,name,duration,"albumId") VALUES
+(300,'Tie Your Mother Down','4:48',103),
+(301,'You Take My Breath Away','5:09',103),
+(302,'Long Away','3:33',103),
+(303,'The Millionaire Waltz','4:54',103),
+(304,'You and I','3:28',103),
+(305,'Somebody to Love','4:56',103),
+(306,'White Man','4:59',103),
+(307,'Good Old-Fashioned Lover Boy','2:54',103),
+(308,'Drowse','3:45',103),
+(309,'Teo Torriatte (Let Us Cling Together)','5:50',103);
