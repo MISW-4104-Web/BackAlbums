@@ -52,9 +52,9 @@ export class CommentService {
         if (!album)
             throw new BusinessLogicException("The album with the given id was not found", BusinessError.NOT_FOUND)
 
-        const collector = await this.collectorRepository.findOne({ where: { id: commentDTO.collector.id } });
-        if (!collector)
-            throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
+        const collector = await this.collectorRepository.findOne({ where: { id: 100} });
+        // if (!collector)
+        //     throw new BusinessLogicException("The collector with the given id was not found", BusinessError.NOT_FOUND)
 
         const { error } = validate(this.schema, commentDTO);
         if(error) {
